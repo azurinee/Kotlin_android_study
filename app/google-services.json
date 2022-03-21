@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1651611719",
+    "firebase_url": "https://tinder-fa792-default-rtdb.firebaseio.com",
+    "project_id": "tinder-fa792",
+    "storage_bucket": "tinder-fa792.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1651611719:android:a12c399a348bbd3378b962",
+        "android_client_info": {
+          "package_name": "com.fastcampus.kotlin.tinder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1651611719-1ku1c33a1ib73ubgvtuapvsg58u3hl0k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9qcOdXGPZZZnY_lZHy7HpfSeLwdb3yQI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1651611719-1ku1c33a1ib73ubgvtuapvsg58u3hl0k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
