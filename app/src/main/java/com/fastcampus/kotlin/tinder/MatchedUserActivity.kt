@@ -8,6 +8,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.fastcampus.kotlin.tinder.DBKey.Companion.LIKED_BY
+import com.fastcampus.kotlin.tinder.DBKey.Companion.MATCH
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
@@ -21,8 +23,8 @@ class MatchedUserActivity : AppCompatActivity() {
     private val adapter = MatchedUserAdapter()
     private val cardItems = mutableListOf<CardItem>()
 
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.activiy_match)
 
         auth = Firebase.auth
@@ -39,12 +41,12 @@ class MatchedUserActivity : AppCompatActivity() {
     }
 
     private fun getMatchedUsers() {
-        val matchedUserDB = userDB.child(getCurrentUserId()).child("likedBy").child("match")
+        val matchedUserDB = userDB.child(getCurrentUserId()).child(LIKED_BY).child(MATCH)
 
         matchedUserDB.addChildEventListener(object: ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 if (snapshot.key?.isNotEmpty() == true) {
-                    getUserByKey(snapshot.key.orEmpty())
+                    getMatchUser(snapshot.key.orEmpty())
                 }
             }
 
@@ -59,8 +61,9 @@ class MatchedUserActivity : AppCompatActivity() {
         })
     }
 
-    private fun getUserByKey(userId: String) {
-        userDB.child(userId).addListenerForSingleValueEvent(object: ValueEventListener {
+    private fun getMatchUser(userId: String) {
+        val matchedDB = userDB.child(userId)
+        matchedDB.addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 cardItems.add(CardItem(userId, snapshot.child("name").value.toString()))
                 adapter.submitList(cardItems)
