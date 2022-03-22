@@ -1,8 +1,10 @@
 package com.fastcampus.kotlin.tinder
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -50,6 +52,24 @@ class LikeActivity : AppCompatActivity(), CardStackListener {
         })
 
         initCardStackView()
+        initLogoutButton()
+        initMatchListButton()
+    }
+
+    private fun initLogoutButton() {
+        val logoutButton = findViewById<Button>(R.id.logoutButton)
+        logoutButton.setOnClickListener {
+            auth.signOut()
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        }
+    }
+
+    private fun initMatchListButton() {
+        val matchListButton = findViewById<Button>(R.id.matchListButton)
+        matchListButton.setOnClickListener {
+            startActivity(Intent(this, MatchedUserActivity::class.java))
+        }
     }
 
     private fun initCardStackView() {

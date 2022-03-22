@@ -1,5 +1,6 @@
 package com.fastcampus.kotlin.tinder
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.widget.LinearLayout
@@ -9,10 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.ChildEventListener
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
@@ -28,7 +26,7 @@ class MatchedUserActivity : AppCompatActivity() {
         setContentView(R.layout.activiy_match)
 
         auth = Firebase.auth
-        userDB = Firebase.database.reference.child("Users")
+        userDB = FirebaseDatabase.getInstance().reference.child("Users")
 
         initMatchedRecyclerView()
         getMatchedUsers()
@@ -42,6 +40,7 @@ class MatchedUserActivity : AppCompatActivity() {
 
     private fun getMatchedUsers() {
         val matchedUserDB = userDB.child(getCurrentUserId()).child("likedBy").child("match")
+
         matchedUserDB.addChildEventListener(object: ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 if (snapshot.key?.isNotEmpty() == true) {
@@ -61,7 +60,13 @@ class MatchedUserActivity : AppCompatActivity() {
     }
 
     private fun getUserByKey(userId: String) {
-
+        userDB.child(userId).addListenerForSingleValueEvent(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                cardItems.add(CardItem(userId, snapshot.child("name").value.toString()))
+                adapter.submitList(cardItems)
+            }
+            override fun onCancelled(error: DatabaseError) { }
+        })
     }
 
     private fun getCurrentUserId() : String {
